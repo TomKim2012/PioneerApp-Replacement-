@@ -1,6 +1,5 @@
 package com.tomkimani.mgwt.demo.client.settings;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -9,7 +8,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.gwtphonegap.client.PhoneGap;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.FormListEntry;
@@ -19,9 +17,9 @@ import com.googlecode.mgwt.ui.client.widget.MListBox;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.WidgetList;
-import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
 import com.tomkimani.mgwt.demo.client.base.BaseView;
 import com.tomkimani.mgwt.demo.client.login.LoginActivity.User;
+import com.tomkimani.mgwt.demo.client.settings.SettingsActivity.Allocation;
 import com.tomkimani.mgwt.demo.client.settings.SettingsActivity.ISettingsView;
 
 public class SettingsView extends BaseView implements ISettingsView{
@@ -36,11 +34,12 @@ public class SettingsView extends BaseView implements ISettingsView{
 	WidgetList deviceSettingList;
 	private WidgetList userSettingList;
 	private MCheckBox activateCheck;
-	private MTextBox serverInput;
-	private MTextBox deviceImei;
+	private HTML deviceName;
+	private HTML deviceImei;
 	private HTML depositTitle;
 	private MListBox mListBox;
 	private Button buttonSave;
+	private HTML deviceTitle;
 	
 	//private final Widget widget;
 	
@@ -58,36 +57,36 @@ public class SettingsView extends BaseView implements ISettingsView{
 		
 		//Requirements for user Settings
 		activateCheck = new MCheckBox();
-		serverInput = new MTextBox();
-		deviceImei = new MTextBox();
+		deviceName = new HTML();
+		deviceImei = new HTML();
 		
-//		deviceImei.setValue()
+		//deviceImei.setValue()
 		
 		//activate
 		activateCheck.setImportant(true);
 		
 		
-		serverInput.setValue(MyRequestBuilder.serverAddress);
-		depositTitle =new HTML("Device Settings");
-		depositTitle.getElement().getStyle().setMarginLeft(20, Unit.PX);
-		depositTitle.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		LayoutPanel.add(depositTitle);
+		deviceName.setText("Huawei Ideos");
+		deviceTitle =new HTML("Device Settings");
+		deviceTitle.getElement().getStyle().setMarginTop(10, Unit.PX);
+		deviceTitle.getElement().getStyle().setMarginLeft(20, Unit.PX);
+		deviceTitle.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+		LayoutPanel.add(deviceTitle);
 		
 		//Device Settings
 		deviceSettingList.add(new FormListEntry("Device Allocation:",activateCheck ));
-		deviceSettingList.add(new FormListEntry("Server Address:", serverInput ));
+		deviceSettingList.add(new FormListEntry("Device Name:", deviceName ));
 		deviceSettingList.add(new FormListEntry("Device IMEI:", deviceImei));
 		deviceSettingList.setRound(true);
 		
 		LayoutPanel.add(deviceSettingList);
 		
 		//User Settings
-		depositTitle.setText("User Settings");
+		depositTitle=new HTML("User Settings");
+		depositTitle.getElement().getStyle().setMarginLeft(20, Unit.PX);
+		depositTitle.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 		LayoutPanel.add(depositTitle);
 	    mListBox = new MListBox();
-		userSettingList.add(new FormListEntry("Allocated User",mListBox));
-		userSettingList.add(new FormListEntry("Allocated Date:", new HTML("\"Automatically Saved\"")));
-		userSettingList.add(new FormListEntry("Allocated Time:", new HTML("\"Automatically Saved\"")));
 		userSettingList.setRound(true);
 		
 		LayoutPanel.add(userSettingList);
@@ -117,6 +116,7 @@ public class SettingsView extends BaseView implements ISettingsView{
 	
 	@Override
 	public void renderUsers(List<User> usersList) {
+		userSettingList.add(new FormListEntry("Allocated User",mListBox));
 		mListBox.addItem("---Select---");
 		for(User user: usersList){
 			mListBox.addItem(user.getFirstName()+" "+ user.getLastName(),
@@ -124,6 +124,22 @@ public class SettingsView extends BaseView implements ISettingsView{
 		}
 	}
 	
+	@Override
+	public void renderAllocation(Allocation allocation) {
+		userSettingList.add(new FormListEntry("Allocated Date:", new HTML(allocation.getallocationDate())));
+		userSettingList.add(new FormListEntry("Allocated User:", new HTML(allocation.getallocatedName())));
+		userSettingList.add(new FormListEntry("Allocated By:", new HTML(allocation.getallocateeName())));
+		userSettingList.add(new FormListEntry("Allocated Date:", new HTML(allocation.getallocationTime())));
+	}
+	
+	
+	public MCheckBox getActivateCheck() {
+		return activateCheck;
+	}
+	
+	public WidgetList getUserSettingList() {
+		return userSettingList;
+	}
 	
 	
 }
