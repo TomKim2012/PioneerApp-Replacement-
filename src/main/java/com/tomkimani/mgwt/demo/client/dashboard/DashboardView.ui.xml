@@ -1,0 +1,24 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+    xmlns:m="urn:import:com.googlecode.mgwt.ui.client.widget"
+    xmlns:TB="urn:import:com.googlecode.mgwt.ui.client.widget.tabbar"
+    xmlns:p="urn:import:com.tomkimani.mgwt.demo.client.ui"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<!-- 			<m:HeaderPanel ui:field="headerPanel"> -->
+<!-- 				<g:HTML text="Pioneer FSA" ui:field="divtitle"></g:HTML> -->
+<!-- 				<m:HeaderButton text="LOGOUT" ui:field="btnLogout"></m:HeaderButton>  -->
+<!-- 			</m:HeaderPanel> -->
+		    
+			<g:VerticalPanel ui:field="vPanel" verticalAlignment="ALIGN_BOTTOM">
+				<g:HorizontalPanel>
+					<p:IconButton  ui:field="btnDeposit" icon="icon-plus icon-2x" text="New Deposit"></p:IconButton>
+					<p:IconButton  ui:field="btnStatement" icon="icon-tasks icon-2x" text="Mini-Statements"></p:IconButton>
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<p:IconButton text="Customers" icon="icon-group icon-2x">
+					</p:IconButton>
+					<p:IconButton text="My Cash" icon="icon-money icon-2x">
+					</p:IconButton>
+				</g:HorizontalPanel>
+			</g:VerticalPanel>
+</ui:UiBinder> 
