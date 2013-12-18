@@ -1,7 +1,5 @@
 package com.tomkimani.mgwt.demo.client.login;
 
-import javax.swing.text.View;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
@@ -24,12 +22,15 @@ import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyBeanFactory;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
+import com.tomkimani.mgwt.demo.client.PioneerAppEntryPoint;
 import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
 
 public class LoginActivity extends MGWTAbstractActivity {
 	ClientFactory factory;
 	private ILoginView view;
 	private MyBeanFactory beanFactory;
+	public static String loggedUserGroup;
+	public static String loggedUserId;
 
 	public interface ILoginView extends IsWidget {
 		HasTapHandlers getLoginButton();
@@ -63,7 +64,7 @@ public class LoginActivity extends MGWTAbstractActivity {
 					public void onTap(TapEvent event) {
 						String userName = view.getuserName();
 						String password = view.getpassword();
-						String imeiCode = "2536-89567-56";
+						String imeiCode = PioneerAppEntryPoint.deviceImei;
 						if((!userName.isEmpty()) && (!password.isEmpty()) ){
 						performLogin(userName, password, imeiCode);
 						}else{
@@ -77,7 +78,8 @@ public class LoginActivity extends MGWTAbstractActivity {
 	private void performLogin(String userName, String password, String imeiCode) {
 		  String customUrl = "login";
 	
-		  JSONObject jrequest = new JSONObject(); jrequest.put("userName", new JSONString(userName));
+		  JSONObject jrequest = new JSONObject(); 
+		  jrequest.put("userName", new JSONString(userName));
 		  jrequest.put("password", new JSONString(password));
 		  jrequest.put("imeiCode", new JSONString(imeiCode));
 		  String postData = jrequest.toString();
@@ -97,6 +99,8 @@ public class LoginActivity extends MGWTAbstractActivity {
 					if (200 == response.getStatusCode()) {
 						User loggedUser = deserializeFromJson(response.getText());
 						if(loggedUser.getAuthorize()){
+							loggedUserId = loggedUser.getUserId();
+							loggedUserGroup= loggedUser.getGroup();
 							factory.getPlaceController().goTo(new DashboardPlace());
 						}else{
 							view.getIssuesArea().setText(loggedUser.getError());
@@ -116,6 +120,7 @@ public class LoginActivity extends MGWTAbstractActivity {
 	
 	public interface User{
 		String getUserId();
+		String getGroup();
 		String getFirstName();
 		String getLastName();
 		String getUserName();

@@ -6,23 +6,28 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestBuilder.Method;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
-import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.dialog.Dialogs;
+import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MCheckBox;
 import com.googlecode.mgwt.ui.client.widget.WidgetList;
 import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyBeanFactory;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
+import com.tomkimani.mgwt.demo.client.PioneerAppEntryPoint;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity;
 import com.tomkimani.mgwt.demo.client.login.LoginActivity.User;
 import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
@@ -30,32 +35,52 @@ import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
 public class SettingsActivity extends BaseActivity {
 		
 		public interface ISettingsView extends IView{
-			HasTapHandlers getButtonSave();
+			Button getButtonSave();
 			void renderUsers(List<User> usersList);
 			void renderAllocation(Allocation allocation);
 			MCheckBox getActivateCheck();
 			WidgetList getUserSettingList();
+			void renderDeviceSettings(String deviceName, String deviceImei);
+			void showUserSettings(boolean status);
+			Allocation getUserAllocation();
+			Allocation getUserdeAllocation();
 		}
 
 		protected List<User> myList;
-		private MyBeanFactory beanFactory;
+		public static MyBeanFactory beanFactory;
+		private Terminal terminal;
+		private String postData;
+		private Allocation allocation;
 		public SettingsActivity(ClientFactory factory) {
 			super(factory);
 		}
+		
 		
 		@Override
 		public void start(AcceptsOneWidget panel, EventBus eventBus) {
 			final ISettingsView view = factory.getSettingsView();
 			setView(view);
 			
+			
 			//AutoBean Factory
 			beanFactory = GWT.create(MyBeanFactory.class);
+			//allocation
+			allocation=view.getUserdeAllocation();
+			
+			//Render Device Settings
+			if(!PioneerAppEntryPoint.deviceImei.isEmpty()){
+			view.renderDeviceSettings(PioneerAppEntryPoint.deviceName, PioneerAppEntryPoint.deviceImei);
+			terminal = new Terminal(PioneerAppEntryPoint.deviceName, PioneerAppEntryPoint.deviceImei);
+			}
 			
 			addHandlerRegistration(view.getButtonSave().addTapHandler(new TapHandler() {
 				
 				@Override
 				public void onTap(TapEvent event) {
-					factory.getPlaceController().goTo(new DashboardPlace());
+					allocation = view.getUserAllocation();
+					CommunicateWithServer(RequestBuilder.POST, view, "allocation");
+					
+					//factory.getPlaceController().goTo(new DashboardPlace());
 				}
 			}));
 			
@@ -71,33 +96,49 @@ public class SettingsActivity extends BaseActivity {
 			
 			addHandlerRegistration(view.getActivateCheck().addTouchEndHandler(new TouchEndHandler() {
 				@Override
-				public void onTouchEnd(
-					com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent event) {
+				public void onTouchEnd(TouchEndEvent event) {
+					if (view.getActivateCheck().getValue()) {
+					CommunicateWithServer(RequestBuilder.POST, view, "terminal");
+					System.out.println(">>>Activate Checked");
+					}else{
+						if(!(allocation.getallocationId() == null)){	
+							CommunicateWithServer(RequestBuilder.POST, view, "deallocation");
+							System.out.println(">>>Called communicate with server de-Allocation");
+						}
+						view.showUserSettings(false);
+						view.getUserSettingList().clear();
+					}
 					
-					view.getUserSettingList().clear();
-					/*if (view.getActivateCheck().getValue()) {
-						FetchDataFromServer(view,"users");
-					}*/
-					
-				}
+				}	
 			}));
+			
+			
 			
 			super.start(panel, eventBus);
 			
 			//Is it allocated?
-			FetchDataFromServer(view,"allocation/imeiCode/2536-89567-56");
+			CommunicateWithServer(RequestBuilder.GET,view,"allocation/imeiCode/"+PioneerAppEntryPoint.deviceImei);
 			
 			panel.setWidget(view);
 		}
 		
 		
 		
-	  private void FetchDataFromServer(final ISettingsView view, final String customUrl) {
+	  private void CommunicateWithServer(final Method httpMethod, final ISettingsView view, final String customUrl) {
 			
 			
-			MyRequestBuilder rqs = new MyRequestBuilder(RequestBuilder.GET, customUrl);
+			MyRequestBuilder rqs = new MyRequestBuilder(httpMethod,customUrl);
 			try {
-			      Request request = rqs.getBuilder().sendRequest(null, new RequestCallback() {
+				  if(httpMethod.equals(RequestBuilder.POST)){
+					  if(customUrl.equals("terminal")){
+					  postData = terminal.toString();
+					  }else if(customUrl.equals("allocation")||customUrl.equals("deallocation")){
+					  postData = makeJson(allocation);
+					  }
+				  }else{
+					  postData = null;
+				  }
+			      Request request = rqs.getBuilder().sendRequest(postData, new RequestCallback() {
 
 					public void onError(Request request, Throwable exception) {
 						Dialogs.alert("Error", "An error occured while retrieving data from server", null);
@@ -107,6 +148,7 @@ public class SettingsActivity extends BaseActivity {
 			          if (200 == response.getStatusCode()) {
 			        	  myList = new ArrayList<User>();
 			        	
+			        	  //Response from server
 			        	  if(response.getText().isEmpty()){
 				          }
 			           	 
@@ -114,16 +156,46 @@ public class SettingsActivity extends BaseActivity {
 				        	  UsersList lst = deserializeFromJson("{\"usersList\":"+response.getText()+"}");
 				        	  myList=lst.getUsersList();
 				        	  view.renderUsers(myList);
+				        	  view.showUserSettings(false);
 				        	  return;
 				        	  
-			        	  }else{
+			        	  }else if((customUrl.contains("allocation")) && httpMethod.equals(RequestBuilder.GET)){
 				        	  Allocation allocation = allocationFromJson(response.getText());
 				        	  if(allocation.getisAllocated()){
-				        	  view.renderAllocation(allocation);
+				        	    view.renderAllocation(allocation);
+				        	    SettingsActivity.this.allocation.setallocationId(allocation.getallocationId());
+				        	    
+				        	    System.out.println("<<Rendered Allocation");
 				        	  }else{
 				        		  view.getActivateCheck().setValue(false);
-				        		  FetchDataFromServer(view, "users");
+				        		  CommunicateWithServer(RequestBuilder.GET, view, "users");
 				        	  }
+			        	  } else if(customUrl.equals("deallocation")){
+			        		  Dialogs.alert("Success", "Device successfully de-Allocated", null);
+			        	  }
+			        	  
+			        	  else if((customUrl.contains("allocation")) && httpMethod.equals(RequestBuilder.POST)){
+			        		  CommunicateWithServer(RequestBuilder.GET, view, "allocation/imeiCode/"+PioneerAppEntryPoint.deviceImei);
+			        		  view.getUserSettingList().clear();
+			        		  view.showUserSettings(true);
+			        		  view.getButtonSave().setVisible(false);
+			        		  
+			        		  Dialogs.alert("Success", "Device successfully Allocated", null);
+			        	  }
+			        	  else if(customUrl.equals("terminal")){
+			        		  if(!response.getText().isEmpty()){
+			        			  terminal.setTerminalId(response.getText());
+			        			  //view.renderUsers(myList);
+			        			  view.showUserSettings(true);
+			        		  }else{
+			        			  view.showUserSettings(true);
+			        			  //Dialogs.alert("Error", "Terminal Not Saved", null);
+			        		  }
+			        	  }
+			        	  else{
+			        		  if(response.getText().equals("Saved")){
+			        			  view.showUserSettings(false);
+			        		  }
 			        	  }
 			        	  
 			          } else {
@@ -135,7 +207,7 @@ public class SettingsActivity extends BaseActivity {
 			      });
 			    } catch (RequestException e) {
 			    	System.err.println("Couldn't retrieve JSON");
-			    	Dialogs.alert("Error", "An error occured while retrievin data from server", null);
+			    	Dialogs.alert("Error", "An error occured while retrieving data from server", null);
 			    }
 		}
 		
@@ -152,11 +224,19 @@ public class SettingsActivity extends BaseActivity {
 		
 		///////--------Allocation Object from Server Side--------////////
 		public interface Allocation{
+			String getallocationId();
+			void setallocationId(String getallocationId);
 			String getallocationDate();
-			String getallocationTime();
 			String getallocatedName();
+			String getallocated();
 			String getallocateeName();
 			Boolean getisAllocated();
+			String getAllocatedTo();
+			String getAllocatedBy();
+			void setAllocatedBy(String allocatedId);
+			void setAllocatedTo(String allocateeId);
+			void setdeAllocatedBy(String loggedUserId);
+			String getdeAllocatedBy();
 		}
 		
 		Allocation allocationFromJson (String json){
@@ -164,9 +244,47 @@ public class SettingsActivity extends BaseActivity {
 			return bean.as();
 		}	
 		
-	  	/*User deserializeFromJson(String json){
-			AutoBean<User> bean = AutoBeanCodex.decode(beanFactory, User.class, json);
-			return bean.as();
-		}	*/
 		
+		////Terminal Object//////
+		public class Terminal{
+			private String terminalId;
+			private String terminalName;
+			private String imeiCode;
+			
+			public Terminal(String terminalName, String imeiCode) {
+				this.terminalName = terminalName;
+				this.imeiCode = imeiCode;
+			}
+			
+			@Override
+			public String toString() {
+				JSONObject jrequest = new JSONObject();
+				jrequest.put("terminalName", new JSONString(terminalName));
+				jrequest.put("imeiCode", new JSONString(imeiCode));
+				return jrequest.toString();
+			}
+			
+			public void setTerminalId(String terminalId) {
+				this.terminalId = terminalId;
+			}
+			
+			public String getTerminalId() {
+				return terminalId;
+			}
+		}
+		
+		public String makeJson(Allocation allocation){
+			JSONObject jrequest = new JSONObject();
+			
+			if(!(allocation.getdeAllocatedBy() == null)){
+				jrequest.put("allocationId", new JSONString(allocation.getallocationId()));
+				jrequest.put("deallocatedBy", new JSONString(allocation.getdeAllocatedBy()));
+				return jrequest.toString();
+			}
+			
+			jrequest.put("allocatedTo", new JSONString(allocation.getAllocatedTo()));
+			jrequest.put("allocatedBy", new JSONString(allocation.getAllocatedBy()));
+			jrequest.put("terminalId", new JSONString(terminal.getTerminalId()));
+			return jrequest.toString();
+		}
 }

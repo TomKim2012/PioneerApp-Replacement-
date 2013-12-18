@@ -49,6 +49,7 @@ public class BaseView implements IView{
 	
 	private void createHeader(){
 		title.setText("Pioneer FSA");
+		headerPanel.setCenterWidget(title);
 		
 		//Logout Button
 		logoutButton.setText("LogOut");

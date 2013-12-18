@@ -15,6 +15,7 @@ import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
+import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.googlecode.mgwt.ui.client.widget.GroupingCellList;
 import com.googlecode.mgwt.ui.client.widget.GroupingCellList.CellGroup;
 import com.googlecode.mgwt.ui.client.widget.GroupingCellList.StandardCellGroup;
@@ -77,7 +78,7 @@ public class TransactionsActivity extends BaseActivity {
 		private void FetchDataFromServer(final ITransactionsView view){
 		view.showLoading(true);
 		
-		String url = "transactions";
+		String url = "transactions/format/json";
 		
 		
 		JsonpRequestBuilder builder = new JsonpRequestBuilder();
@@ -87,7 +88,6 @@ public class TransactionsActivity extends BaseActivity {
 				public void onSuccess(JsArray<MyTransaction> result) {
 					//Hide the Loading Interface
 					view.showLoading(false);
-					
 					if(result.length()==0){
 						return;
 					}
@@ -141,6 +141,7 @@ public class TransactionsActivity extends BaseActivity {
 				@Override
 				public void onFailure(Throwable caught) {
 					view.showLoading(false);
+					Dialogs.alert("Results Empty", "No transactions to Display", null);
 					caught.printStackTrace();
 				}
 			});

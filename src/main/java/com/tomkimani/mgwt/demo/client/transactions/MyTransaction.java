@@ -16,6 +16,7 @@ public class MyTransaction extends JavaScriptObject implements Transaction{
 	public final native String getTransactionType()/*-{ return this.transaction_type; }-*/;
 	public final native String getTransactionDate()/*-{ return this.transaction_date; }-*/;
 	public final native String getTransactionTime()/*-{ return this.transaction_time; }-*/;
+	public final native String getError()/*-{ return this.error; }-*/;
 	
 	public final native String getDisplayName()/*-{ return this.transaction_type+" - "+"Ksh "+this.transaction_amount+" ("+this.transaction_time+")"
 												; }-*/;

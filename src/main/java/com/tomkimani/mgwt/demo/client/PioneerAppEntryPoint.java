@@ -22,12 +22,18 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.googlecode.gwtphonegap.client.PhoneGap;
+import com.googlecode.gwtphonegap.client.PhoneGapAvailableEvent;
+import com.googlecode.gwtphonegap.client.PhoneGapAvailableHandler;
+import com.googlecode.gwtphonegap.client.PhoneGapTimeoutEvent;
+import com.googlecode.gwtphonegap.client.PhoneGapTimeoutHandler;
 import com.googlecode.mgwt.mvp.client.AnimatableDisplay;
 import com.googlecode.mgwt.mvp.client.AnimatingActivityManager;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
+import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.tomkimani.mgwt.demo.client.css.MyColorTheme;
 import com.tomkimani.mgwt.demo.client.places.LoginPlace;
@@ -37,6 +43,9 @@ import com.tomkimani.mgwt.demo.client.places.LoginPlace;
  * 
  */
 public class PioneerAppEntryPoint implements EntryPoint {
+
+	public static String deviceName;
+	public static String deviceImei;
 
 	private void start() {
 		//ViewPort
@@ -63,6 +72,7 @@ public class PioneerAppEntryPoint implements EntryPoint {
 		
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper
 		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+		
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
 		historyHandler.register(clientFactory.getPlaceController(), clientFactory.getEventBus(), new LoginPlace());
 		historyHandler.handleCurrentHistory();
@@ -71,15 +81,35 @@ public class PioneerAppEntryPoint implements EntryPoint {
 	//final PhoneGap phoneGap = GWT.create(PhoneGap.class);
 	private void createPhoneDisplay(ClientFactory clientFactory) {
 		AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
-
+		
+		//Activity Mapper
 		PhoneActivityMapper appActivityMapper = new PhoneActivityMapper(clientFactory);
 		PhoneAnimationMapper appAnimationMapper = new PhoneAnimationMapper();
 		AnimatingActivityManager activityManager = new AnimatingActivityManager(appActivityMapper, appAnimationMapper, clientFactory.getEventBus());
+		
+		//PhoneGap
+		final PhoneGap phoneGap = GWT.create(PhoneGap.class);
+		
+		phoneGap.addHandler(new PhoneGapAvailableHandler(){
+
+	        @Override
+	        public void onPhoneGapAvailable(PhoneGapAvailableEvent event) {
+	        	deviceName = phoneGap.getDevice().getName().isEmpty()?phoneGap.getDevice().getPlatform():phoneGap.getDevice().getName();
+	        	deviceImei = phoneGap.getDevice().getUuid();
+	        }
+		});
+
+		phoneGap.addHandler(new PhoneGapTimeoutHandler() {
+		        @Override
+		        public void onPhoneGapTimeout(PhoneGapTimeoutEvent event) {
+		        	Dialogs.alert("Problem", "The application failed to read device settings for the Phone", null);
+		        }
+		});
+
+		phoneGap.initializePhoneGap();
 
 		activityManager.setDisplay(display);
 		
-		//Window.alert(phoneGap.getDevice().getUuid());
-
 		RootPanel.get().add(display);
 	}
 
