@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
+import com.googlecode.mgwt.ui.client.widget.MTextBox;
 import com.googlecode.mgwt.ui.client.widget.ProgressIndicator;
 import com.googlecode.mgwt.ui.client.widget.WidgetList;
 import com.tomkimani.mgwt.demo.client.css.LogoBundle;
@@ -30,6 +31,7 @@ public class LoginView implements ILoginView{
 	private TextField userName;
 	private PasswordField passWord;
 	private ProgressIndicator progressIndicator;
+	private MTextBox serverAddress;
 	
 	//private final Widget widget;
 	
@@ -50,8 +52,11 @@ public class LoginView implements ILoginView{
 		widgetList.setRound(true);
 		userName = new TextField("UserName");
 		passWord = new PasswordField("Password");
+		serverAddress = new MTextBox();
 		widgetList.add(userName);
 		widgetList.add(passWord);
+		widgetList.add(serverAddress);
+		
 		LayoutPanel.add(widgetList);
 		
 		//Progress Indicator
@@ -100,6 +105,10 @@ public class LoginView implements ILoginView{
 		}else{
 			progressIndicator.setVisible(false);
 		}
+	}
+	
+	public MTextBox getServerAddress() {
+		return serverAddress;
 	}
 
 

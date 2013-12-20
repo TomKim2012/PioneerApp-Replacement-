@@ -19,6 +19,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 import com.googlecode.mgwt.ui.client.dialog.Dialogs;
+import com.googlecode.mgwt.ui.client.widget.MTextBox;
 import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyBeanFactory;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
@@ -42,6 +43,8 @@ public class LoginActivity extends MGWTAbstractActivity {
 		HTML getIssuesArea();
 
 		void showBusy(boolean status);
+
+		MTextBox getServerAddress();
 	}
 
 	public LoginActivity(ClientFactory factory) {
@@ -55,7 +58,10 @@ public class LoginActivity extends MGWTAbstractActivity {
 
 		// AutoBean Factory
 		beanFactory = GWT.create(MyBeanFactory.class);
-
+		
+		
+		view.getServerAddress().setValue(MyRequestBuilder.serverAddress);
+		
 		// Add Tap Handler for Login
 		addHandlerRegistration(view.getLoginButton().addTapHandler(
 				new TapHandler() {
@@ -65,6 +71,10 @@ public class LoginActivity extends MGWTAbstractActivity {
 						String userName = view.getuserName();
 						String password = view.getpassword();
 						String imeiCode = PioneerAppEntryPoint.deviceImei;
+						
+						String serverAddress = view.getServerAddress().getValue();
+						MyRequestBuilder.setServerAddress(serverAddress);
+						
 						if((!userName.isEmpty()) && (!password.isEmpty()) ){
 						performLogin(userName, password, imeiCode);
 						}else{

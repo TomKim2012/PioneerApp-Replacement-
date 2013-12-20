@@ -18,8 +18,9 @@ public class MyRequestBuilder{
 		builder.setIncludeCredentials(true);
 	}
 	
-	public static void setServerUrl(String serverUrl) {
-		MyRequestBuilder.serverUrl = serverUrl;
+	public static void setServerAddress(String serverAddress) {
+		MyRequestBuilder.serverAddress = serverAddress;
+		serverUrl= "http://"+serverAddress+"/PioneerServer/index.php/api/flexipay_server/";
 	}
 	
 	public RequestBuilder getBuilder() {
