@@ -102,7 +102,7 @@ public class TransactionDetailView implements ITransactionDetailView{
 		list.add(new FormListEntry("Reference Number", new HTML(cust1.getRefNo())));
 		list.add(new FormListEntry("Names:", new HTML(cust1.getFirstName()+" "+cust1.getLastName())));
 //		list.add(new FormListEntry("Id Number:", new HTML(cust1.getIdNo())));
-		list.add(new FormListEntry("Account Number:", new HTML(cust1.getclCode())));
+		list.add(new FormListEntry("Client Code:", new HTML(cust1.getRefNo())));
 		list.add(new FormListEntry("Phone Number:", new HTML(cust1.getMobileNo())));
 		
 		

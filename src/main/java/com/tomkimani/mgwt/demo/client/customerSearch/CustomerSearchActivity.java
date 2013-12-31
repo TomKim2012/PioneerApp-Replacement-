@@ -139,7 +139,6 @@ public class CustomerSearchActivity extends BaseActivity {
 			String getIdNo();
 			String getMobileNo();
 			String getCustomerId();
-			String getclCode();
 		}
 		
 		public interface CustomerList{

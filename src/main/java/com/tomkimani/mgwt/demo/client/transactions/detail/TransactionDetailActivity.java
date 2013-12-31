@@ -26,6 +26,7 @@ import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyBeanFactory;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
 import com.tomkimani.mgwt.demo.client.customerSearch.CustomerSearchActivity.Customer;
+import com.tomkimani.mgwt.demo.client.places.CustomerSearchPlace;
 import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
 import com.tomkimani.mgwt.demo.client.places.SearchResultsPlace;
 import com.tomkimani.mgwt.demo.client.places.TransactionDetailPlace;
@@ -91,6 +92,14 @@ public class TransactionDetailActivity extends MGWTAbstractActivity {
 							public void onTap(TapEvent event) {
 								view.getProgressIndicator().setVisible(true);
 								performTransaction(cust1.getCustomerId());
+							}
+						}));
+						
+						addHandlerRegistration(view.getBackButton().addTapHandler(new TapHandler() {
+							
+							@Override
+							public void onTap(TapEvent event) {
+								factory.getPlaceController().goTo(new CustomerSearchPlace());
 							}
 						}));
 						
@@ -174,13 +183,16 @@ public class TransactionDetailActivity extends MGWTAbstractActivity {
 		
 		
 		private void performTransaction(String customerId) {
-			  String customUrl="custTransactions/customerId/"+customerId;
+			  String customUrl="custTransactions";
 			  
+			  JSONObject jrequest = new JSONObject();
+			  jrequest.put("clCode", new JSONString(customerId));
+			  String postData = jrequest.toString();
 		
-			MyRequestBuilder rqs = new MyRequestBuilder(RequestBuilder.GET, customUrl);
+			MyRequestBuilder rqs = new MyRequestBuilder(RequestBuilder.POST, customUrl);
 
 			try {
-				Request request = rqs.getBuilder().sendRequest(null, new RequestCallback() {
+				Request request = rqs.getBuilder().sendRequest(postData, new RequestCallback() {
 					public void onError(Request request, Throwable exception) {
 						System.err.println("Couldn't retrieve JSON");
 					}

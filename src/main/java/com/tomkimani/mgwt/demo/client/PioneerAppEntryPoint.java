@@ -46,7 +46,6 @@ public class PioneerAppEntryPoint implements EntryPoint {
 
 	public static String deviceName;
 	public static String deviceImei;
-	private PhoneGap phoneGap;
 
 	private void start() {
 		//ViewPort
@@ -88,24 +87,11 @@ public class PioneerAppEntryPoint implements EntryPoint {
 		PhoneAnimationMapper appAnimationMapper = new PhoneAnimationMapper();
 		AnimatingActivityManager activityManager = new AnimatingActivityManager(appActivityMapper, appAnimationMapper, clientFactory.getEventBus());
 		
-		phoneGap = GWT.create(PhoneGap.class);
-		phoneGap.initializePhoneGap();
-		setupOnDeviceReady();
+		//PhoneGap
+		final PhoneGap phoneGap = GWT.create(PhoneGap.class);
 		
-		activityManager.setDisplay(display);
-		
-		RootPanel.get().add(display);
-	}
-
-	private native void setupOnDeviceReady() /*-{
-    var self = this;
-    var cb = function() {self.@com.tomkimani.mgwt.demo.client.PioneerAppEntryPoint::onDeviceReady()();};
-	$doc.addEventListener("deviceready", $entry(cb), false);
-	}-*/;
-	
-	private void onDeviceReady() {
-		Dialogs.alert("Problem", "PhoneGap is available!", null);
 		phoneGap.addHandler(new PhoneGapAvailableHandler(){
+
 	        @Override
 	        public void onPhoneGapAvailable(PhoneGapAvailableEvent event) {
 	        	deviceName = phoneGap.getDevice().getName().isEmpty()?phoneGap.getDevice().getPlatform():phoneGap.getDevice().getName();
@@ -120,8 +106,13 @@ public class PioneerAppEntryPoint implements EntryPoint {
 		        }
 		});
 
+		phoneGap.initializePhoneGap();
+
+		activityManager.setDisplay(display);
+		
+		RootPanel.get().add(display);
 	}
-	
+
 	@Override
 	public void onModuleLoad() {
 

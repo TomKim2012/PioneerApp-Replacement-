@@ -11,7 +11,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.autobean.shared.AutoBean;
-import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.FormListEntry;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
@@ -138,7 +137,6 @@ public class SettingsView extends BaseView implements ISettingsView{
 		userSettingList.add(new FormListEntry("Allocated Date:", new HTML(allocation.getallocationDate())));
 		userSettingList.add(new FormListEntry("Allocated User:", new HTML(allocation.getallocatedName())));
 		userSettingList.add(new FormListEntry("Allocated By:", new HTML(allocation.getallocateeName())));
-		userSettingList.add(new FormListEntry("Allocated Date:", new HTML(allocation.getallocationDate())));
 	}
 	
 	

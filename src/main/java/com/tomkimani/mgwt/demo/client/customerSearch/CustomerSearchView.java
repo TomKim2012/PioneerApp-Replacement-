@@ -49,12 +49,12 @@ public class CustomerSearchView extends BaseView implements ICustomerSearchView{
 	    
 	    //Select Box
 	    mListBox = new MListBox();
-	    mListBox.addItem("Phone Number", "mobileNo");
-	    mListBox.addItem("First Name", "firstName");
-	    mListBox.addItem("Last Name", "lastName");
-//	    mListBox.addItem("Id Number", "idNo");
-	    mListBox.addItem("A/C Number", "accountNo");
-	    mListBox.addItem("Reference Number", "RefNo");
+	    mListBox.addItem("Phone Number", "phone");
+	    mListBox.addItem("First Name", "clname");
+	    mListBox.addItem("Last Name", "clsurname");
+	    mListBox.addItem("Id Number", "idcard");
+	    mListBox.addItem("Client Code", "clCode");
+	    mListBox.addItem("Reference Number", "refno");
 	    widgetList.add(new FormListEntry("Search By",mListBox));
 	    
 	    mListBox.addChangeHandler(new ChangeHandler() {
