@@ -55,7 +55,7 @@ public class LoginView implements ILoginView{
 		serverAddress = new MTextBox();
 		widgetList.add(userName);
 		widgetList.add(passWord);
-		widgetList.add(serverAddress);
+		//widgetList.add(serverAddress);
 		
 		LayoutPanel.add(widgetList);
 		

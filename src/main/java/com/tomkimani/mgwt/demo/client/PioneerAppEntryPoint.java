@@ -102,7 +102,7 @@ public class PioneerAppEntryPoint implements EntryPoint {
 		phoneGap.addHandler(new PhoneGapTimeoutHandler() {
 		        @Override
 		        public void onPhoneGapTimeout(PhoneGapTimeoutEvent event) {
-		        	Dialogs.alert("Problem", "The application failed to read device settings for the Phone", null);
+		        	Dialogs.alert("Problem", "The application failed to read device settings", null);
 		        }
 		});
 
