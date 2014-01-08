@@ -33,12 +33,19 @@ public class BaseView implements IView{
 		title = new HTML();
 		logoutButton = new HeaderButton();
 		
+		//progress Indicator
+		progressIndicator = new ProgressIndicator();
+		
+		
 		//Header
 		createHeader();
 	}
 	
 	protected void createContent(Widget content) {
 		mainPanel.add(content);
+		progressIndicator.getElement().setAttribute("style","margin:auto; margin-bottom: 140px");
+		mainPanel.add(progressIndicator);
+		showBusy(false);
 		createBottomButtons();
 	}
 
@@ -62,6 +69,8 @@ public class BaseView implements IView{
 		backButton.setBackButton(true);
 		headerPanel.setLeftWidget(backButton);
 		mainPanel.add(headerPanel);
+		
+		
 	}
 	
 	private void createBottomButtons(){
