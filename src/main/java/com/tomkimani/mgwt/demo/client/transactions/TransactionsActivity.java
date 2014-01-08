@@ -61,7 +61,6 @@ public class TransactionsActivity extends BaseActivity {
 					int index =event.getSelectedItem().getIndex();
 					Transaction transaction = trxs.get(index);
 					factory.getPlaceController().goTo(new TransactionDetailPlace(transaction));
-					
 				}
 			});
 			
@@ -106,8 +105,11 @@ public class TransactionsActivity extends BaseActivity {
 					Collections.sort(trxs, new Comparator<Transaction>() {
 						@Override
 						public int compare(Transaction t1, Transaction t2) {
-							Date date1 = dtf.parse(t1.getTransactionDate());
-							Date date2 = dtf.parse(t2.getTransactionDate());
+							String dateString1 = t1.getTransactionDate()+" "+t1.getTransactionTime();
+							String dateString2 = t2.getTransactionDate()+" "+t2.getTransactionTime();
+							Date date1 = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(dateString1);
+							Date date2 = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss").parse(dateString2);
+							//Date date2 = dtf.parse(t2.getTransactionDate()+ " "+t1.getTransactionTime());
 							return -date1.compareTo(date2);
 						}
 					});

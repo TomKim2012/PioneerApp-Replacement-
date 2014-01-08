@@ -12,7 +12,6 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
@@ -79,7 +78,12 @@ public class SettingsActivity extends BaseActivity {
 				@Override
 				public void onTap(TapEvent event) {
 					allocation = view.getUserAllocation();
+					
+					if(!(allocation== null)){
 					CommunicateWithServer(RequestBuilder.POST, view, "allocation");
+					}else{
+						Dialogs.alert("Warning", "You have not selected a user", null);
+					}
 					
 					//factory.getPlaceController().goTo(new DashboardPlace());
 				}
@@ -96,11 +100,20 @@ public class SettingsActivity extends BaseActivity {
 			
 			
 			addHandlerRegistration(view.getActivateCheck().addTouchEndHandler(new TouchEndHandler() {
+				private boolean isCleared=false;
+
 				@Override
 				public void onTouchEnd(TouchEndEvent event) {
 					if (view.getActivateCheck().getValue()) {
+					
 					CommunicateWithServer(RequestBuilder.POST, view, "terminal");
-					System.out.println(">>>Activate Checked");
+					
+					if(isCleared){
+					 CommunicateWithServer(RequestBuilder.GET, view, "users");
+					}
+					
+					System.out.println(isCleared);
+					view.showUserSettings(true);
 					}else{
 						//Window.alert("Switched Off");
 						if(!(allocation.getallocationId() == null)){	
@@ -108,7 +121,10 @@ public class SettingsActivity extends BaseActivity {
 							System.out.println(">>>Called communicate with server de-Allocation");
 							view.showUserSettings(false);
 						}
+						
+						view.showUserSettings(false);
 						view.getUserSettingList().clear();
+						isCleared =true;
 					}
 					
 				}	
@@ -127,7 +143,7 @@ public class SettingsActivity extends BaseActivity {
 		
 		
 	  private void CommunicateWithServer(final Method httpMethod, final ISettingsView view, final String customUrl) {
-			
+			view.showBusy(true);
 			
 			MyRequestBuilder rqs = new MyRequestBuilder(httpMethod,customUrl);
 			try {
@@ -148,6 +164,7 @@ public class SettingsActivity extends BaseActivity {
 
 			        public void onResponseReceived(Request request, Response response) {
 			          if (200 == response.getStatusCode()) {
+			        	  view.showBusy(false);
 			        	  myList = new ArrayList<User>();
 			        	
 			        	  //Response from server
@@ -162,10 +179,11 @@ public class SettingsActivity extends BaseActivity {
 				        	  return;
 				        	  
 			        	  }else if((customUrl.contains("allocation")) && httpMethod.equals(RequestBuilder.GET)){
-				        	  Allocation allocation = allocationFromJson(response.getText());
+			        		  Allocation allocation = allocationFromJson(response.getText());
+				        	 
 				        	  if(allocation.getisAllocated()){
 				        	    view.renderAllocation(allocation);
-				        	    SettingsActivity.this.allocation.setallocationId(allocation.getallocationId());
+				        	    SettingsActivity.this.allocation.setallocationId(allocation.getallocationId()); //Allocation Object
 				        	    
 				        	    System.out.println("<<Rendered Allocation");
 				        	  }else{
@@ -182,7 +200,7 @@ public class SettingsActivity extends BaseActivity {
 			        		  view.showUserSettings(true);
 			        		  view.getButtonSave().setVisible(false);
 			        		  
-			        		  Dialogs.alert("Success", "Device successfully Allocated", null);
+			        		  Dialogs.alert("Success","Device successfully Allocated", null);
 			        	  }
 			        	  else if(customUrl.equals("terminal")){
 			        		  if(!response.getText().isEmpty()){

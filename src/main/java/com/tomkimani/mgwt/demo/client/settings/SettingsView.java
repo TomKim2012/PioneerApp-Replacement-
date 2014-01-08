@@ -60,12 +60,8 @@ public class SettingsView extends BaseView implements ISettingsView{
 		
 		//Requirements for user Settings
 		activateCheck = new MCheckBox();
-		
-		
-		//deviceImei.setValue()
-		
-		//activate
 		activateCheck.setImportant(true);
+		activateCheck.setValue(false);
 		
 		
 		deviceTitle =new HTML("Device Settings");
@@ -123,8 +119,8 @@ public class SettingsView extends BaseView implements ISettingsView{
 	public void renderUsers(List<User> usersList) {
 		mListBox = new MListBox();
 		
-		userSettingList.add(new FormListEntry("Allocate User",mListBox));
-		mListBox.addItem("---Select---");
+		userSettingList.add(new FormListEntry("Allocate User:",mListBox));
+		mListBox.addItem("---Select----");
 		for(User user: usersList){
 			mListBox.addItem(user.getFirstName()+" "+ user.getLastName(),
 							user.getUserId());
@@ -134,6 +130,7 @@ public class SettingsView extends BaseView implements ISettingsView{
 	@Override
 	public void renderAllocation(Allocation allocation) {
 		userSettingTitle.setVisible(true);
+		activateCheck.setValue(true);
 		userSettingList.add(new FormListEntry("Allocated Date:", new HTML(allocation.getallocationDate())));
 		userSettingList.add(new FormListEntry("Allocated User:", new HTML(allocation.getallocatedName())));
 		userSettingList.add(new FormListEntry("Allocated By:", new HTML(allocation.getallocateeName())));
@@ -165,10 +162,13 @@ public class SettingsView extends BaseView implements ISettingsView{
 	public Allocation getUserAllocation(){
 		Allocation allocate = createAllocation();
 		String date = DateTimeFormat.getFormat("yyyy-MM-dd").format(new Date());
+		if(mListBox.getSelectedIndex() != 0){
 		allocate.setAllocatedTo(mListBox.getValue(mListBox.getSelectedIndex()));
 		allocate.setAllocatedBy(LoginActivity.loggedUserId);
 		allocate.setdeAllocatedBy(null);
 		return allocate;
+		}
+		return null;
 	}
 	
 	public Allocation getUserdeAllocation(){
