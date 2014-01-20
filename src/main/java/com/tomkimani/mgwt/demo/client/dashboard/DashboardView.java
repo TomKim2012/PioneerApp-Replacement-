@@ -1,38 +1,46 @@
 package com.tomkimani.mgwt.demo.client.dashboard;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.tomkimani.mgwt.demo.client.base.BaseView;
-import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity.ITestView;
+import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity.IDashboardView;
+import com.tomkimani.mgwt.demo.client.login.LoginActivity;
 import com.tomkimani.mgwt.demo.client.ui.IconButton;
 
-public class DashboardView extends BaseView implements ITestView{
+public class DashboardView extends BaseView implements IDashboardView{
 
-	private static TestViewUiBinder uiBinder = GWT.create(TestViewUiBinder.class);
+	private static DashboardViewUiBinder uiBinder = GWT.create(DashboardViewUiBinder.class);
 	
 	private final Widget widget;
 	
 	@UiField VerticalPanel vPanel;
 	@UiField IconButton btnDeposit;
 	@UiField IconButton btnStatement;
-
+	@UiField InlineLabel spnUserName;
+	@UiField HTMLPanel divUser;
 	private LayoutPanel dashboadPanel;
 
-	interface TestViewUiBinder extends UiBinder<Widget, DashboardView> {
+	interface DashboardViewUiBinder extends UiBinder<Widget, DashboardView> {
 	}
 
 	public DashboardView() {
 		widget = uiBinder.createAndBindUi(this);
 		dashboadPanel = new LayoutPanel();
 		
-		vPanel.setSpacing(15);
-		dashboadPanel.setHeight("81%");
+		//UserName Details
+		spnUserName.setText("Welcome "+ LoginActivity.loggedFullNames);
+		dashboadPanel.add(divUser);
+		
+		dashboadPanel.setHeight("100%");
 		dashboadPanel.add(widget);
 		ScrollPanel scroller = new ScrollPanel();
 		scroller.add(dashboadPanel);

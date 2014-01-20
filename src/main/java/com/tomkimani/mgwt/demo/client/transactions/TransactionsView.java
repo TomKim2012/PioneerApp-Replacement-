@@ -64,7 +64,7 @@ public class TransactionsView extends BaseView implements ITransactionsView{
 			
 			safeHtmlBuilder.appendEscaped(  model.getTransactionTime()+ " : "+
 											model.getTransactionType()+" -Ksh "+
-										     model.getAmount());
+										    model.getAmount());
 		}
 
 		@Override

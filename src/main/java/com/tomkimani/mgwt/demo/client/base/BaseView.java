@@ -12,6 +12,7 @@ import com.googlecode.mgwt.ui.client.widget.tabbar.BookmarkTabBarButton;
 import com.googlecode.mgwt.ui.client.widget.tabbar.FeaturedTabBarButton;
 import com.googlecode.mgwt.ui.client.widget.tabbar.MoreTabBarButton;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity.IView;
+import com.tomkimani.mgwt.demo.client.login.LoginActivity;
 
 public class BaseView implements IView{
 
@@ -25,12 +26,14 @@ public class BaseView implements IView{
 	protected FeaturedTabBarButton homeButton;
 	protected MoreTabBarButton settingsButton;
 	protected HeaderButton backButton;
+	private HTML loggedUser;
 
 	public BaseView(){
 		//Container
 		mainPanel = new LayoutPanel();
 		headerPanel = new HeaderPanel();
 		title = new HTML();
+		loggedUser = new HTML();
 		logoutButton = new HeaderButton();
 		
 		//progress Indicator
@@ -55,6 +58,7 @@ public class BaseView implements IView{
 	}
 	
 	private void createHeader(){
+		//Application Title
 		title.setText("Pioneer FSA");
 		headerPanel.setCenterWidget(title);
 		
@@ -63,14 +67,13 @@ public class BaseView implements IView{
 		headerPanel.setRightWidget(logoutButton);
 		
 		
+		//Back Button
 		backButton = new HeaderButton();
 		backButton.setVisible(false);
 		backButton.setText("Back");
 		backButton.setBackButton(true);
 		headerPanel.setLeftWidget(backButton);
-		mainPanel.add(headerPanel);
-		
-		
+		mainPanel.add(headerPanel);		
 	}
 	
 	private void createBottomButtons(){

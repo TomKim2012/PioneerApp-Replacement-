@@ -8,6 +8,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.mvp.client.MGWTAbstractActivity;
 import com.tomkimani.mgwt.demo.client.ClientFactory;
+import com.tomkimani.mgwt.demo.client.login.LoginActivity;
 import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
 import com.tomkimani.mgwt.demo.client.places.LoginPlace;
 import com.tomkimani.mgwt.demo.client.places.SettingsPlace;
@@ -44,6 +45,7 @@ public class BaseActivity extends MGWTAbstractActivity {
 			@Override
 			public void onTap(TapEvent event) {
 				factory.getPlaceController().goTo(new LoginPlace());
+				LoginActivity.loggedUserId = null;
 			}
 		}));
 		

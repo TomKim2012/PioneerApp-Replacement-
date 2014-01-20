@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import com.tomkimani.mgwt.demo.client.SearchResults.SearchResultsActivity.ISearchResultsView;
 import com.tomkimani.mgwt.demo.client.customerSearch.CustomerSearchActivity.ICustomerSearchView;
-import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity.ITestView;
+import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity.IDashboardView;
 import com.tomkimani.mgwt.demo.client.login.LoginActivity.ILoginView;
 import com.tomkimani.mgwt.demo.client.settings.SettingsActivity.ISettingsView;
 import com.tomkimani.mgwt.demo.client.transactions.TransactionsActivity.ITransactionsView;
@@ -32,7 +32,7 @@ public interface ClientFactory {
 
 	public PlaceController getPlaceController();
 
-	public ITestView getTestView();
+	public IDashboardView getDashboardView();
 	
 	public ILoginView getLoginView();
 

@@ -60,6 +60,7 @@ public class TransactionsActivity extends BaseActivity {
 					System.out.println(event.getSelectedItem().getIndex());
 					int index =event.getSelectedItem().getIndex();
 					Transaction transaction = trxs.get(index);
+					
 					factory.getPlaceController().goTo(new TransactionDetailPlace(transaction));
 				}
 			});

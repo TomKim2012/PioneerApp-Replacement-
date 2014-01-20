@@ -76,7 +76,7 @@ public class TransactionDetailView extends BaseView implements ITransactionDetai
 		headerPanel.setTitle("Transaction Detail");
 		headerPanel.setCenterWidget(new HTML(trx.getTransactionType()));
 		
-		dateTime=new HTML(trx.getTransactionDate()+ " "+ trx.getTransactionTime());
+		dateTime=new HTML(trx.getTransactionDate()+" "+ trx.getTransactionTime());
 		
 		list.add(new FormListEntry("Transaction Date/Time:", dateTime));
 		list.add(new FormListEntry("Transaction Type:", new HTML(trx.getTransactionType())));
@@ -89,9 +89,8 @@ public class TransactionDetailView extends BaseView implements ITransactionDetai
 	public void renderDisplay(Customer cust1, Boolean isMiniStatement) {
 		headerPanel.setCenter("Confirm Customer");
 		amountTextBox = new MTextBox();
-		list.add(new FormListEntry("Reference Number", new HTML(cust1.getRefNo())));
 		list.add(new FormListEntry("Names:", new HTML(cust1.getFirstName()+" "+cust1.getLastName())));
-//		list.add(new FormListEntry("Id Number:", new HTML(cust1.getIdNo())));
+		list.add(new FormListEntry("Id Number:", new HTML(cust1.getIdNo())));
 		list.add(new FormListEntry("Client Code:", new HTML(cust1.getRefNo())));
 		list.add(new FormListEntry("Phone Number:", new HTML(cust1.getMobileNo())));
 		

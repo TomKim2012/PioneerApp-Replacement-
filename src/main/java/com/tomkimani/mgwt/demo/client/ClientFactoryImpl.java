@@ -22,7 +22,7 @@ import com.tomkimani.mgwt.demo.client.SearchResults.SearchResultsActivity.ISearc
 import com.tomkimani.mgwt.demo.client.SearchResults.SearchResultsView;
 import com.tomkimani.mgwt.demo.client.customerSearch.CustomerSearchActivity.ICustomerSearchView;
 import com.tomkimani.mgwt.demo.client.customerSearch.CustomerSearchView;
-import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity.ITestView;
+import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity.IDashboardView;
 import com.tomkimani.mgwt.demo.client.dashboard.DashboardView;
 import com.tomkimani.mgwt.demo.client.login.LoginActivity.ILoginView;
 import com.tomkimani.mgwt.demo.client.login.LoginView;
@@ -58,7 +58,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	}
 
 	@Override
-	public ITestView getTestView() {
+	public IDashboardView getDashboardView() {
 		return new DashboardView();
 	}
 

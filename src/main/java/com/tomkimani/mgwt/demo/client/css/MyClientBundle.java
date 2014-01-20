@@ -1,5 +1,6 @@
 package com.tomkimani.mgwt.demo.client.css;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.googlecode.mgwt.ui.client.theme.base.ButtonBarCss;
 import com.googlecode.mgwt.ui.client.theme.base.HeaderCss;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
@@ -36,8 +37,21 @@ public interface MyClientBundle extends MGWTClientBundleBaseThemeDesktop{
 	ButtonBarCss getButtonBarCss();
 	
 	@Override
+	@Source("com/googlecode/mgwt/ui/client/theme/base/resources/tabbar/bookmarks.png")
+	ImageResource tabBarBookMarkImage();
+	
+	@Override
+	@Source("com/googlecode/mgwt/ui/client/theme/base/resources/tabbar/featured.png")
+	ImageResource tabBarFeaturedImage();
+	
+	@Override
+	@Source("com/googlecode/mgwt/ui/client/theme/base/resources/tabbar/more.png")
+	ImageResource tabBarMoreImage();
+	
+	@Override
 	@Source("main.css")
 	MainCss getMainCss();
+	
 	
 	/*@Source({"fontawesome/font-awesome.css"})
 	FontOwesomeCss getFontOwesomeCss();

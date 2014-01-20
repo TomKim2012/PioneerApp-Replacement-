@@ -13,7 +13,7 @@ import com.tomkimani.mgwt.demo.client.places.TransactionsPlace;
 public class DashboardActivity extends BaseActivity {
 		//TransactionsActivity transaction= new TransactionsActivity(factory);
 		
-		public interface ITestView extends IView{
+		public interface IDashboardView extends IView{
 			HasTapHandlers getBtnDeposit();
 
 			HasTapHandlers getBtnStatement();
@@ -24,7 +24,7 @@ public class DashboardActivity extends BaseActivity {
 		
 		@Override
 		public void start(AcceptsOneWidget panel, EventBus eventBus) {
-			ITestView view = factory.getTestView();
+			IDashboardView view = factory.getDashboardView();
 			setView(view);
 			
 			super.start(panel, eventBus);

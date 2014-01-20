@@ -30,8 +30,10 @@ public class LoginActivity extends MGWTAbstractActivity {
 	ClientFactory factory;
 	private ILoginView view;
 	private MyBeanFactory beanFactory;
+	public static String loggedFullNames;
 	public static String loggedUserGroup;
 	public static String loggedUserId;
+	public static String loggedUserName;
 
 	public interface ILoginView extends IsWidget {
 		HasTapHandlers getLoginButton();
@@ -73,7 +75,8 @@ public class LoginActivity extends MGWTAbstractActivity {
 						String imeiCode = PioneerAppEntryPoint.deviceImei;
 						
 						//String serverAddress = view.getServerAddress().getValue();
-						String serverAddress = "197.248.2.44:8030";
+//						String serverAddress = "197.248.2.44:8030";
+						String serverAddress = "localhost";
 						MyRequestBuilder.setServerAddress(serverAddress);
 						
 						if((!userName.isEmpty()) && (!password.isEmpty()) ){
@@ -100,6 +103,7 @@ public class LoginActivity extends MGWTAbstractActivity {
 		view.showBusy(true);
 		try {
 			Request request = rqs.getBuilder().sendRequest(postData, new RequestCallback() {
+
 				public void onError(Request request, Throwable exception) {
 					Dialogs.alert("Error", "There was a problem communicating with the server. Contact the Administrator for Help", null);
 				}
@@ -112,6 +116,8 @@ public class LoginActivity extends MGWTAbstractActivity {
 						if(loggedUser.getAuthorize()){
 							loggedUserId = loggedUser.getUserId();
 							loggedUserGroup= loggedUser.getGroup();
+							loggedUserName =loggedUser.getUserName();
+							loggedFullNames= loggedUser.getFirstName();// + " "+ loggedUser.getLastName();
 							factory.getPlaceController().goTo(new DashboardPlace());
 						}else{
 							view.getIssuesArea().setText(loggedUser.getError());
