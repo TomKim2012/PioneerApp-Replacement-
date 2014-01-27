@@ -42,18 +42,20 @@ public class SearchResultsActivity extends BaseActivity {
 			
 			Place place =factory.getPlaceController().getWhere();
 			
+			
 			if(place instanceof SearchResultsPlace){
 				SearchResultsPlace resultsPlace = (SearchResultsPlace)place;
 				customerList = resultsPlace.getCustomerresults();
-				isMiniStatement = resultsPlace.getMiniStatement();
+				isMiniStatement = resultsPlace.getMiniStatement();				
 			}
 			
 			List<CustomerResult> cresults= new ArrayList<CustomerResult>();
 			 
 			for(Customer cst : customerList){
        		   cresults.add(new CustomerResult(cst.getRefNo(), cst.getFirstName(), cst.getLastName()));
-       	   }
-
+			}
+			
+			
 			addHandlerRegistration(view.getCellSelectedHandler().addCellSelectedHandler(new CellSelectedHandler(){
 				@Override
 				public void onCellSelected(CellSelectedEvent event) {

@@ -1,10 +1,11 @@
 package com.tomkimani.mgwt.demo.client.dashboard;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -27,6 +28,7 @@ public class DashboardView extends BaseView implements IDashboardView{
 	@UiField IconButton btnStatement;
 	@UiField InlineLabel spnUserName;
 	@UiField HTMLPanel divUser;
+	@UiField HorizontalPanel downsideDiv;
 	private LayoutPanel dashboadPanel;
 
 	interface DashboardViewUiBinder extends UiBinder<Widget, DashboardView> {
@@ -36,8 +38,11 @@ public class DashboardView extends BaseView implements IDashboardView{
 		widget = uiBinder.createAndBindUi(this);
 		dashboadPanel = new LayoutPanel();
 		
+		//downsideDiv.setVisible(false);
 		//UserName Details
 		spnUserName.setText("Welcome "+ LoginActivity.loggedFullNames);
+		spnUserName.getElement().getStyle().setMargin(5.0, Unit.PCT);
+		spnUserName.getElement().getStyle().setColor("Blue");
 		dashboadPanel.add(divUser);
 		
 		dashboadPanel.setHeight("100%");

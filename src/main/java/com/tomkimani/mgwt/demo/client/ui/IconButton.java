@@ -11,8 +11,14 @@ public class IconButton extends Button {
 		super((ButtonsCss) MGWTStyle.getTheme().getMGWTClientBundle().getButtonCss());
 	}
 	
+	public IconButton( String icon,String text){
+		String icn ="<i class='mgwt-Button-icon "+icon+"'></i>";
+		String txt ="<span class='text'>"+text+"</span>";
+		getElement().setInnerHTML(icn+txt);
+	}
+	
 	private void createButton(){
-		String icn ="<i class='mgwt-Button-icon "+this.icon+"'></i>";
+		String icn ="<i class='mgwt-Button-icon "+this.icon +"'></i>";
 		String txt ="<span class='txt'>"+this.text+"</span>";
 		getElement().setInnerHTML(icn+txt);
 	}

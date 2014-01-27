@@ -2,6 +2,7 @@ package com.tomkimani.mgwt.demo.client.css;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.googlecode.mgwt.ui.client.theme.base.ButtonBarCss;
+import com.googlecode.mgwt.ui.client.theme.base.DialogCss;
 import com.googlecode.mgwt.ui.client.theme.base.HeaderCss;
 import com.googlecode.mgwt.ui.client.theme.base.InputCss;
 import com.googlecode.mgwt.ui.client.theme.base.ListCss;
@@ -51,6 +52,10 @@ public interface MyClientBundle extends MGWTClientBundleBaseThemeDesktop{
 	@Override
 	@Source("main.css")
 	MainCss getMainCss();
+	
+	@Override
+	@Source({ "com/googlecode/mgwt/ui/client/theme/base/css/dialog.css", "com/googlecode/mgwt/ui/client/theme/base/css/android/dialog.css" })
+	DialogCss getDialogCss();
 	
 	
 	/*@Source({"fontawesome/font-awesome.css"})

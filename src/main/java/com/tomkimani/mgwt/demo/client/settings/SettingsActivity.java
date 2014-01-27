@@ -20,13 +20,14 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
-import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MCheckBox;
 import com.googlecode.mgwt.ui.client.widget.WidgetList;
 import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyBeanFactory;
+import com.tomkimani.mgwt.demo.client.MyDialogs;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
+import com.tomkimani.mgwt.demo.client.MyRequestCallback;
 import com.tomkimani.mgwt.demo.client.PioneerAppEntryPoint;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity;
 import com.tomkimani.mgwt.demo.client.login.LoginActivity.User;
@@ -82,7 +83,7 @@ public class SettingsActivity extends BaseActivity {
 					if(!(allocation== null)){
 					CommunicateWithServer(RequestBuilder.POST, view, "allocation");
 					}else{
-						Dialogs.alert("Warning", "You have not selected a user", null);
+						MyDialogs.alert("Warning", "You have not selected a user");
 					}
 					
 					//factory.getPlaceController().goTo(new DashboardPlace());
@@ -115,10 +116,8 @@ public class SettingsActivity extends BaseActivity {
 					System.out.println(isCleared);
 					view.showUserSettings(true);
 					}else{
-						//Window.alert("Switched Off");
 						if(!(allocation.getallocationId() == null)){	
 							CommunicateWithServer(RequestBuilder.POST, view, "deallocation");
-							System.out.println(">>>Called communicate with server de-Allocation");
 							view.showUserSettings(false);
 						}
 						
@@ -156,11 +155,7 @@ public class SettingsActivity extends BaseActivity {
 				  }else{
 					  postData = null;
 				  }
-			      Request request = rqs.getBuilder().sendRequest(postData, new RequestCallback() {
-
-					public void onError(Request request, Throwable exception) {
-						Dialogs.alert("Error", "An error occured while retrieving data from server", null);
-			        }
+			      Request request = rqs.getBuilder().sendRequest(postData, new MyRequestCallback() {
 
 			        public void onResponseReceived(Request request, Response response) {
 			          if (200 == response.getStatusCode()) {
@@ -191,7 +186,7 @@ public class SettingsActivity extends BaseActivity {
 				        		  CommunicateWithServer(RequestBuilder.GET, view, "users");
 				        	  }
 			        	  } else if(customUrl.equals("deallocation")){
-			        		  Dialogs.alert("Success", "Device successfully de-Allocated", null);
+			        		  MyDialogs.alert("Success", "Device successfully de-Allocated");
 			        	  }
 			        	  
 			        	  else if((customUrl.contains("allocation")) && httpMethod.equals(RequestBuilder.POST)){
@@ -200,7 +195,7 @@ public class SettingsActivity extends BaseActivity {
 			        		  view.showUserSettings(true);
 			        		  view.getButtonSave().setVisible(false);
 			        		  
-			        		  Dialogs.alert("Success","Device successfully Allocated", null);
+			        		  MyDialogs.alert("Success","Device successfully Allocated");
 			        	  }
 			        	  else if(customUrl.equals("terminal")){
 			        		  if(!response.getText().isEmpty()){
@@ -209,7 +204,7 @@ public class SettingsActivity extends BaseActivity {
 			        			  view.showUserSettings(true);
 			        		  }else{
 			        			  view.showUserSettings(true);
-			        			  //Dialogs.alert("Error", "Terminal Not Saved", null);
+			        			  //MyDialogs.alert("Error", "Terminal Not Saved", null);
 			        		  }
 			        	  }
 			        	  else{
@@ -221,13 +216,13 @@ public class SettingsActivity extends BaseActivity {
 			          } else {
 			        	  System.err.println("Couldn't retrieve JSON (" + response.getStatusText()
 			                + ")");
-			        	  Dialogs.alert("Error", "An error occured while retrieving data from server", null);
+			        	  MyDialogs.alert("Error", "An error occured while retrieving data from server");
 			          }
 			        }
 			      });
 			    } catch (RequestException e) {
 			    	System.err.println("Couldn't retrieve JSON");
-			    	Dialogs.alert("Error", "An error occured while retrieving data from server", null);
+			    	MyDialogs.alert("Error", "An error occured while retrieving data from server");
 			    }
 		}
 		

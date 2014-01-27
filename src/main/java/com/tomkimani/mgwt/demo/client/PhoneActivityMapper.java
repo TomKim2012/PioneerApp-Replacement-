@@ -4,7 +4,6 @@ package com.tomkimani.mgwt.demo.client;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.tomkimani.mgwt.demo.client.SearchResults.SearchResultsActivity;
 import com.tomkimani.mgwt.demo.client.customerSearch.CustomerSearchActivity;
 import com.tomkimani.mgwt.demo.client.dashboard.DashboardActivity;
@@ -59,7 +58,7 @@ public class PhoneActivityMapper implements ActivityMapper {
 		}
 		if(place instanceof SettingsPlace){
 			if(!LoginActivity.loggedUserGroup.equals("Admin")){
-				Dialogs.alert("Not Allowed", "You are not allowed to view this Page", null);
+				MyDialogs.alert("Not Allowed", "The Settings page is for Administrator.");
 				return new DashboardActivity(clientFactory);
 			}
 			return new SettingsActivity(clientFactory);

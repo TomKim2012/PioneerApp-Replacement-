@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2010 Daniel Kurka
  * 
@@ -22,6 +23,7 @@ import com.tomkimani.mgwt.demo.client.places.DashboardPlace.DashboardPlaceTokeni
 import com.tomkimani.mgwt.demo.client.places.LoginPlace.LoginPlaceTokenizer;
 import com.tomkimani.mgwt.demo.client.places.SearchResultsPlace.SearchResultsPlaceTokenizer;
 import com.tomkimani.mgwt.demo.client.places.SettingsPlace.SettingsPlaceTokenizer;
+import com.tomkimani.mgwt.demo.client.places.TransactionDetailPlace.TransactionDetailPlaceTokenizer;
 import com.tomkimani.mgwt.demo.client.places.TransactionsPlace.TransactionsPlaceTokenizer;
 
 /**
@@ -29,8 +31,8 @@ import com.tomkimani.mgwt.demo.client.places.TransactionsPlace.TransactionsPlace
  * 
  */
 @WithTokenizers({DashboardPlaceTokenizer.class,LoginPlaceTokenizer.class,TransactionsPlaceTokenizer.class,
-				CustomerSearchPlaceTokenizer.class, SearchResultsPlaceTokenizer.class, SettingsPlaceTokenizer.class
-				
+				TransactionDetailPlaceTokenizer.class,CustomerSearchPlaceTokenizer.class, SearchResultsPlaceTokenizer.class,
+				SettingsPlaceTokenizer.class
 			   })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 }

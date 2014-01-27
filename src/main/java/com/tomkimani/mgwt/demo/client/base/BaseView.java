@@ -12,7 +12,7 @@ import com.googlecode.mgwt.ui.client.widget.tabbar.BookmarkTabBarButton;
 import com.googlecode.mgwt.ui.client.widget.tabbar.FeaturedTabBarButton;
 import com.googlecode.mgwt.ui.client.widget.tabbar.MoreTabBarButton;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity.IView;
-import com.tomkimani.mgwt.demo.client.login.LoginActivity;
+import com.tomkimani.mgwt.demo.client.ui.IconButton;
 
 public class BaseView implements IView{
 
@@ -22,9 +22,9 @@ public class BaseView implements IView{
 	private ProgressIndicator progressIndicator;
 	protected HeaderButton logoutButton;
 	private HTML title;
-	protected BookmarkTabBarButton transactionButton;
-	protected FeaturedTabBarButton homeButton;
-	protected MoreTabBarButton settingsButton;
+	protected IconButton transactionButton;
+	protected IconButton homeButton;
+	protected IconButton settingsButton;
 	protected HeaderButton backButton;
 	private HTML loggedUser;
 
@@ -79,14 +79,10 @@ public class BaseView implements IView{
 	private void createBottomButtons(){
 		//Initializations
 		buttonBar= new ButtonBar();
-		homeButton = new FeaturedTabBarButton();
-		transactionButton= new BookmarkTabBarButton();
-		settingsButton = new MoreTabBarButton();
-		
-		//TabBar Buttons
-		homeButton.setText("Home");
-		transactionButton.setText("Transactions");
-		settingsButton.setText("Settings");
+		homeButton = new IconButton("icon-home", "Home");
+		transactionButton = new IconButton("icon-list", "Transactions");
+		settingsButton = new IconButton("icon-cogs", "Settings");
+	
 		
 		buttonBar.add(homeButton);
 		buttonBar.add(transactionButton);

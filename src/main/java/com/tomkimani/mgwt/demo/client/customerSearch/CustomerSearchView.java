@@ -34,6 +34,7 @@ public class CustomerSearchView extends BaseView implements ICustomerSearchView{
 	private HTML IssuesArea;
 	private ProgressIndicator progressIndicator;
 	private LayoutPanel SearchFilterPanel;
+	protected String selectedValue;
 	
 	//private final Widget widget;
 	
@@ -46,22 +47,31 @@ public class CustomerSearchView extends BaseView implements ICustomerSearchView{
 		widgetList.setRound(true);
 		
 		
-	    
+		//Customer Input - Number
+		custInput.getElement().getFirstChildElement().setAttribute("type","number");
+		
 	    //Select Box
 	    mListBox = new MListBox();
 	    mListBox.addItem("Phone Number", "phone");
 	    mListBox.addItem("First Name", "clname");
 	    mListBox.addItem("Last Name", "clsurname");
-	    mListBox.addItem("Id Number", "idcard");
-	    mListBox.addItem("Client Code", "clCode");
+	    //mListBox.addItem("Id Number", "idcard");
+	    //mListBox.addItem("Client Code", "clCode");
 	    mListBox.addItem("Reference Number", "refno");
 	    widgetList.add(new FormListEntry("Search By",mListBox));
 	    
 	    mListBox.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				String value =mListBox.getItemText(mListBox.getSelectedIndex());
+				String value=mListBox.getItemText(mListBox.getSelectedIndex());
 				entry.setWidget(value,custInput);
+				selectedValue = mListBox.getValue(mListBox.getSelectedIndex());
+				
+				if(selectedValue.equals("phone")){
+					custInput.getElement().getFirstChildElement().setAttribute("type","number");
+				}else{
+					custInput.getElement().getFirstChildElement().setAttribute("type","text");
+				}
 			}
 		});
 	    
@@ -71,7 +81,7 @@ public class CustomerSearchView extends BaseView implements ICustomerSearchView{
 	    
 		//Progress Indicator
 		progressIndicator = new ProgressIndicator();
-		progressIndicator.getElement().setAttribute("style", "margin:auto; margin-top: 50px");
+		progressIndicator.getElement().setAttribute("style", "margin:auto; margin-top:50px");
 		progressIndicator.setVisible(false);
 		SearchFilterPanel.add(progressIndicator);
 		

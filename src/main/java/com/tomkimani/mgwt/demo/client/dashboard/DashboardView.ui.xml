@@ -17,7 +17,7 @@
 					<p:IconButton  ui:field="btnDeposit" icon="icon-plus icon-2x" text="New Deposit"></p:IconButton>
 					<p:IconButton  ui:field="btnStatement" icon="icon-tasks icon-2x" text="Mini-Statements"></p:IconButton>
 				</g:HorizontalPanel>
-				<g:HorizontalPanel>
+				<g:HorizontalPanel ui:field="downsideDiv">
 					<p:IconButton text="Customers" icon="icon-group icon-2x">
 					</p:IconButton>
 					<p:IconButton text="My Cash" icon="icon-money icon-2x">

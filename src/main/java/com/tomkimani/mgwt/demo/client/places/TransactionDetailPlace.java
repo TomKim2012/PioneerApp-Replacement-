@@ -16,8 +16,9 @@ public class TransactionDetailPlace extends Place{
 	}
 	public TransactionDetailPlace() {
 	}
+	
 	public TransactionDetailPlace(Customer customer) {
-		this.customer =customer;
+		this.customer=customer;
 	}
 	
 	public TransactionDetailPlace(Customer customer, Boolean isMinistatement) {

@@ -33,7 +33,6 @@ import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
-import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.tomkimani.mgwt.demo.client.css.MyColorTheme;
 import com.tomkimani.mgwt.demo.client.places.LoginPlace;
@@ -79,7 +78,7 @@ public class PioneerAppEntryPoint implements EntryPoint {
 	}
 	
 	//final PhoneGap phoneGap = GWT.create(PhoneGap.class);
-	private void createPhoneDisplay(ClientFactory clientFactory) {
+	private void createPhoneDisplay(final ClientFactory clientFactory) {
 		AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
 		
 		//Activity Mapper
@@ -96,13 +95,18 @@ public class PioneerAppEntryPoint implements EntryPoint {
 	        public void onPhoneGapAvailable(PhoneGapAvailableEvent event) {
 	        	deviceName = phoneGap.getDevice().getName().isEmpty()?phoneGap.getDevice().getPlatform():phoneGap.getDevice().getName();
 	        	deviceImei = phoneGap.getDevice().getUuid();
+	        	
+	        	clientFactory.setPhonegap(phoneGap);
+	        	
+	        	//factory to MyDialogs
+	        	MyDialogs.phoneGap=phoneGap;
 	        }
 		});
 
 		phoneGap.addHandler(new PhoneGapTimeoutHandler() {
 		        @Override
 		        public void onPhoneGapTimeout(PhoneGapTimeoutEvent event) {
-		        	Dialogs.alert("Problem", "The application failed to read device settings", null);
+		        	MyDialogs.alert("Problem", "The application failed to read device settings");
 		        }
 		});
 

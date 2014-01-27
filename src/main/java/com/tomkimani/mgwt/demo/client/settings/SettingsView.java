@@ -55,7 +55,7 @@ public class SettingsView extends BaseView implements ISettingsView{
 		
 		headerPanel.setCenter("Settings");
 		
-		backButton.setVisible(true);
+		backButton.setVisible(false);
 		
 		
 		//Requirements for user Settings

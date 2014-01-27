@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.place.shared.Place;
@@ -18,10 +17,11 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyBeanFactory;
+import com.tomkimani.mgwt.demo.client.MyDialogs;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
+import com.tomkimani.mgwt.demo.client.MyRequestCallback;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity;
 import com.tomkimani.mgwt.demo.client.places.CustomerSearchPlace;
 import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
@@ -70,7 +70,7 @@ public class CustomerSearchActivity extends BaseActivity {
 					if(!value.isEmpty()){
 						postDataToServer(parameter,value,view);
 					}else{
-						view.getIssuesArea().setText("You have not entered any value");
+						view.getIssuesArea().setText("You have not entered any value or done selection");
 						view.getIssuesArea().setVisible(true);
 					}
 				}
@@ -92,15 +92,12 @@ public class CustomerSearchActivity extends BaseActivity {
 			MyRequestBuilder rqs = new MyRequestBuilder(RequestBuilder.GET, customUrl);
 			try {
 				  view.showBusy(true);
-			      Request request = rqs.getBuilder().sendRequest(null, new RequestCallback() {
-
-					public void onError(Request request, Throwable exception) {
-			          System.err.println("Couldn't retrieve JSON");
-			        }
-
+			      Request request = rqs.getBuilder().sendRequest(null, new MyRequestCallback() {
+			    	
+			    	@Override
 			        public void onResponseReceived(Request request, Response response) {
-			          if (200 == response.getStatusCode()) {
-			        	  view.showBusy(false);
+			        	super.onResponseReceived(request, response);  
+			    		view.showBusy(false);
 			        	  custList = new ArrayList<Customer>();
 			        	
 			        	  if(response.getText().isEmpty()){
@@ -118,17 +115,13 @@ public class CustomerSearchActivity extends BaseActivity {
 			        	  }else{
 			        		  factory.getPlaceController().goTo(new SearchResultsPlace(custList));
 			        	  }
-			        	  
-			          } else {
-			        	  view.showBusy(false);
-			        	  System.err.println("Couldn't retrieve JSON (" + response.getStatusText()
-			                + ")");
-			        	  Dialogs.alert("Error", "An error occured while retrieving the data", null);
-			          }
+			         
 			        }
 			      });
 			    } catch (RequestException e) {
-			    	System.err.println("Couldn't retrieve JSON");
+			    	MyDialogs.alert(
+							MyDialogs.NETWORK_ERROR_MESSAGE,
+							MyDialogs.NETWORK_ERROR_TITLE);
 			    }
 		}
 		
@@ -146,7 +139,7 @@ public class CustomerSearchActivity extends BaseActivity {
 		}
 		
 		CustomerList deserializeFromJson (String json){
-			System.out.println(json);
+			//System.out.println(json);
 			AutoBean<CustomerList> bean = AutoBeanCodex.decode(beanFactory, CustomerList.class, json);
 			return bean.as();
 		}	

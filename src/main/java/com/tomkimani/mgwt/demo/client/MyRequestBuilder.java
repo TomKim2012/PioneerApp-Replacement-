@@ -11,12 +11,16 @@ public class MyRequestBuilder{
 	private String format = "/format/json/";
 	private RequestBuilder builder;
 	
+	
 	public MyRequestBuilder(Method httpMethod, String customUrl) {
 		this.customUrl = customUrl;
 		builder = new RequestBuilder(httpMethod, serverUrl + this.customUrl+ this.format);
 		builder.setHeader("Content-Type", "application/json");
 		builder.setIncludeCredentials(true);
+		
 	}
+	
+	
 	
 	public static void setServerAddress(String serverAddress) {
 		MyRequestBuilder.serverAddress = serverAddress;
@@ -27,6 +31,7 @@ public class MyRequestBuilder{
 		return builder;
 	}
 	
+	/*** Application Utilities - PhoneGap****/
 	
-	
+
 }

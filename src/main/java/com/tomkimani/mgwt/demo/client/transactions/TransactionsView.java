@@ -8,8 +8,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.ui.client.dialog.Dialogs;
 import com.googlecode.mgwt.ui.client.widget.GroupingCellList;
 import com.googlecode.mgwt.ui.client.widget.GroupingCellList.CellGroup;
+import com.googlecode.mgwt.ui.client.widget.FormListEntry;
 import com.googlecode.mgwt.ui.client.widget.HeaderList;
 import com.googlecode.mgwt.ui.client.widget.ProgressBar;
+import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 import com.googlecode.mgwt.ui.client.widget.WidgetList;
 import com.googlecode.mgwt.ui.client.widget.celllist.Cell;
 import com.tomkimani.mgwt.demo.client.base.BaseView;
@@ -24,6 +26,9 @@ public class TransactionsView extends BaseView implements ITransactionsView{
 	private WidgetList wList;
 	private HeaderList<Header, Content> headerList;
 	private GroupingCellList<Header, Content> groupCell;
+	private WidgetList detailedList;
+	private HTML dateTime;
+	private ScrollPanel scroll;
 	
 	//private final Widget widget;
 	
@@ -49,7 +54,49 @@ public class TransactionsView extends BaseView implements ITransactionsView{
 		wList.setRound(true);
 		mainPanel.add(wList);
 		
+		
+		//List Display
+		detailedList = new WidgetList();
+		detailedList.setRound(true);
+		scroll = new ScrollPanel();
+		scroll.add(detailedList);
+		scroll.setVisible(false);
+		mainPanel.add(scroll);
+		
 		createContent(headerList);
+	}
+	
+	/*
+	 * List to display transaction Detail
+	 */
+	@Override
+	public void renderDisplay(Transaction trx){
+		showTransactions(false);
+		detailedList.clear();
+		headerPanel.setCenter("Transaction Detail");
+		headerPanel.setCenterWidget(new HTML(trx.getTransactionType()));
+		
+		dateTime=new HTML(trx.getTransactionDate()+" "+ trx.getTransactionTime());
+		
+		detailedList.add(new FormListEntry("Transaction Date/Time:",dateTime));
+		detailedList.add(new FormListEntry("Transaction Type:",new HTML(trx.getTransactionType())));
+		detailedList.add(new FormListEntry("Transaction Code:",new HTML(trx.getTransactionCode())));
+		detailedList.add(new FormListEntry("Transaction Amount:",new HTML(trx.getTransactionAmount())));
+		detailedList.add(new FormListEntry("Customer:",new HTML(trx.getCustNames())));
+	}
+	
+	@Override
+	public void showTransactions(boolean status){
+		headerPanel.setCenter("Transactions");
+		if(status){
+			headerList.setVisible(true);
+			scroll.setVisible(false);
+			backButton.setVisible(false);
+		}else{
+			headerList.setVisible(false);
+			scroll.setVisible(true);
+			backButton.setVisible(true);
+		}
 	}
 	
 	@Override
@@ -111,7 +158,7 @@ public class TransactionsView extends BaseView implements ITransactionsView{
 	public GroupingCellList<Header, Content> getGroupCell() {
 		return groupCell;
 	}
-
+	
 	
 	/*
 	 public void setTopics(List<Transaction> topicList) {

@@ -18,6 +18,7 @@ package com.tomkimani.mgwt.demo.client;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.googlecode.gwtphonegap.client.PhoneGap;
 import com.tomkimani.mgwt.demo.client.SearchResults.SearchResultsActivity.ISearchResultsView;
 import com.tomkimani.mgwt.demo.client.SearchResults.SearchResultsView;
 import com.tomkimani.mgwt.demo.client.customerSearch.CustomerSearchActivity.ICustomerSearchView;
@@ -41,6 +42,7 @@ public class ClientFactoryImpl implements ClientFactory {
 
 	private EventBus eventBus;
 	private PlaceController placeController;
+	private PhoneGap phonegap;
 
 	public ClientFactoryImpl() {
 		eventBus = new SimpleEventBus();
@@ -51,7 +53,11 @@ public class ClientFactoryImpl implements ClientFactory {
 	public EventBus getEventBus() {
 		return eventBus;
 	}
-
+	
+	public void setPhonegap(PhoneGap phonegap) {
+		this.phonegap = phonegap;
+	}
+	
 	@Override
 	public PlaceController getPlaceController() {
 		return placeController;
@@ -90,5 +96,10 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public ISettingsView getSettingsView() {
 		return new SettingsView();
+	}
+
+	@Override
+	public PhoneGap getPhonegap() {
+		return this.phonegap;
 	}
 }
