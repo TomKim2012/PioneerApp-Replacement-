@@ -44,7 +44,6 @@ public class TransactionsView extends BaseView implements ITransactionsView{
 		groupCell.setGroup(true);
 		headerList= new HeaderList<Header, Content>(groupCell);
 		
-		
 		/* Shows the progress */
 		wList = new WidgetList();
 		progress = new ProgressBar();
@@ -64,8 +63,15 @@ public class TransactionsView extends BaseView implements ITransactionsView{
 		mainPanel.add(scroll);
 		
 		createContent(headerList);
+		setButtonBar();
 	}
 	
+	private void setButtonBar() {
+		homeButton.setSelected(false);
+		settingsButton.setSelected(false);
+		transactionButton.setSelected(true);
+	}
+
 	/*
 	 * List to display transaction Detail
 	 */

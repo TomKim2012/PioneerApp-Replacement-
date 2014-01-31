@@ -29,11 +29,13 @@ import com.tomkimani.mgwt.demo.client.places.CustomerSearchPlace;
 import com.tomkimani.mgwt.demo.client.places.DashboardPlace;
 import com.tomkimani.mgwt.demo.client.places.TransactionDetailPlace;
 import com.tomkimani.mgwt.demo.client.places.TransactionsPlace;
+import com.tomkimani.mgwt.demo.client.transactions.Transaction;
 
 public class TransactionDetailActivity extends BaseActivity {
 		private ITransactionDetailView view;
 		private MyBeanFactory beanFactory;
 		private Boolean isMiniStatement=false;
+		//private Logger log = Logger.getLogger(getClass().getName());
 		
 		public interface ITransactionDetailView extends IView{
 			public HasTapHandlers getBackButton();
@@ -79,8 +81,10 @@ public class TransactionDetailActivity extends BaseActivity {
 										new ConfirmCallback() {
 											@Override
 											public void onConfirm(int button) {
+												if(button == 1){
 												view.getProgressIndicator().setVisible(true);
 												performTransaction(cust1.getCustomerId());
+												}
 											}
 										});
 								}
@@ -100,7 +104,7 @@ public class TransactionDetailActivity extends BaseActivity {
 					final ConfirmCallback confirmBack =new ConfirmCallback(){
 						@Override
 						public void onConfirm(int button) {
-							if(button==0){	
+							if(button==1){	
 							performTransaction(view.getAmountTextBox(),cust1.getCustomerId());
 							}
 						}
@@ -156,7 +160,7 @@ public class TransactionDetailActivity extends BaseActivity {
 							
 							TransactionResult result = deserializeFromJson(response.getText());
 							if(result.getSuccess()){
-								showResponseSuccess();
+								showResponseSuccess(result);
 							}else{
 								MyDialogs.alert("Transaction Failure", "There was a problem posting the transaction");
 							}
@@ -175,19 +179,30 @@ public class TransactionDetailActivity extends BaseActivity {
 			showTransactionComplete();
 		}
 		
-		private void showResponseSuccess() {
+		private void showResponseSuccess(TransactionResult result) {
+			final Transaction trx = makeTransaction();
+			
+			trx.setCustNames(result.getCustNames());
+			trx.setTransactionAmount(result.getTransactionAmount());
+			trx.setTransactionCode(result.getTransactionCode());
+			trx.setTransactionTime(result.getTransactionTime());
+			trx.setTransactionDate(result.getTransactionDate());
+			trx.setTransactionType(result.getTransactionType());
+			
 			MyDialogs.alert("Success", "Transaction successfull completed.",new AlertCallback() {
 				@Override
 				public void onOkButtonClicked() {
-					factory.getPlaceController().goTo(new TransactionsPlace());
+					factory.getPlaceController().goTo(new TransactionsPlace(trx));
 				}
 			},"OK");
-			MyDialogs.Beep(2);
+			MyDialogs.Beep(1);
+			MyDialogs.vibrate(1000);
 			MyDialogs.vibrate(1000);
 		}
+	
 		private void showTransactionComplete() {
 			factory.getPlaceController().goTo(new DashboardPlace());
-			MyDialogs.alert("Transaction Success", "Sent. Wait for the server to reply");
+			MyDialogs.alert("Transaction Success", "Sent. Wait for response");
 		}
 
 		private void performTransaction(String customerId) {
@@ -207,9 +222,9 @@ public class TransactionDetailActivity extends BaseActivity {
 						if (200 == response.getStatusCode()) {
 							TransactionResult result = deserializeFromJson(response.getText());
 							if(result.getSuccess()){
-								showResponseSuccess();
+								showResponseSuccess(result);
 							}else{
-								MyDialogs.alert("Transaction Failure", "Server could not  post your transaction");
+								MyDialogs.alert("Transaction Failure", "Server could not post your transaction");
 							}
 						} else {
 							MyDialogs.alert("Transaction Failure", "There was a problem posting the transaction");
@@ -226,6 +241,12 @@ public class TransactionDetailActivity extends BaseActivity {
 		public interface TransactionResult{
 			Boolean getSuccess();
 			Boolean getSms();
+			String getCustNames();
+			String getTransactionAmount();
+			String getTransactionCode();
+			String getTransactionType();
+			String getTransactionDate();
+			String getTransactionTime();
 		}
 		
 		TransactionResult makeTransactionResult(){
@@ -237,4 +258,10 @@ public class TransactionDetailActivity extends BaseActivity {
 			AutoBean<TransactionResult> bean = AutoBeanCodex.decode(beanFactory, TransactionResult.class, json);
 			return bean.as();
 		}	
+		
+		public Transaction makeTransaction() {
+			AutoBean<Transaction> transaction = beanFactory.transaction();
+			return transaction.as();
+		}
+
 }

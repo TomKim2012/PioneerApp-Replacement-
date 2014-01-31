@@ -77,9 +77,8 @@ public class LoginActivity extends MGWTAbstractActivity {
 						String password = view.getpassword();
 						String imeiCode = PioneerAppEntryPoint.deviceImei;
 
-						// String serverAddress =
 						// view.getServerAddress().getValue();
-						// String serverAddress = "197.248.2.44:8030";
+						//String serverAddress = "197.248.2.44:8030";
 						//String serverAddress = "192.168.43.66";
 						//String serverAddress = "192.168.0.106";
 						String serverAddress = "localhost";

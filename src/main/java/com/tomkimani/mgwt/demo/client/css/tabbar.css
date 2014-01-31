@@ -34,7 +34,7 @@
 }
 
 .mgwt-TabBar-Button-selected {
-	background-color: rgba(255, 255, 255, 0.15);
+	background-color: rgba(0, 0, 0, 0.15);
 }
 
 .mgwt-TabBar-Button-selected .mgwt-TabBar-Button-text {
@@ -46,25 +46,25 @@
 	color: #fff;
 	text-align: center;
 	z-index: 1;
-	margin-top: -5px;
+	margin-top:2px;
 }
 
 .mgwt-TabBar-Button-icon {
-	margin-left: auto;
+	margin-left: 39px;
 	margin-right: auto;
 	z-index: 0;
+	color: #fff;
+	font-size: 30px;
 }
 
 @if user.agent safari {
 	.mgwt-TabBar-Button-icon {
-		background-image: literal('-webkit-gradient(linear, 30% 0%, 60% 70%, from(#fff), to(#fff))');
+		/*background-image: literal('-webkit-gradient(linear, 30% 0%, 60% 70%, from(#fff), to(#fff))');*/
 	}
 }
 
 @if user.agent safari {
 	.mgwt-TabBar-Button-selected .mgwt-TabBar-Button-icon {
-		background-color: #fff;
-		/*background-image: literal('-webkit-gradient(linear, 30% 0%, 60% 70%,  from(#dee8f1), to(#3ec6f9), color-stop(0.6,#7ab3ed),color-stop(0.7,#2f92e6))'); */
 	}
 }
 

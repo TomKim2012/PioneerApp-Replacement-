@@ -40,7 +40,7 @@ public class DashboardView extends BaseView implements IDashboardView{
 		
 		//downsideDiv.setVisible(false);
 		//UserName Details
-		spnUserName.setText("Welcome "+ LoginActivity.loggedFullNames);
+		spnUserName.setText("Welcome "+LoginActivity.loggedFullNames);
 		spnUserName.getElement().getStyle().setMargin(5.0, Unit.PCT);
 		spnUserName.getElement().getStyle().setColor("Blue");
 		dashboadPanel.add(divUser);
@@ -51,11 +51,18 @@ public class DashboardView extends BaseView implements IDashboardView{
 		scroller.add(dashboadPanel);
 		
 		createContent(scroller);
+		setButtonBar();
 	}
 	
 	@Override
 	public Widget asWidget() {
 		return super.asWidget();
+	}
+	
+	private void setButtonBar() {
+		homeButton.setSelected(true);
+		//transactionButton.setSelected(false);
+		//settingsButton.setSelected(false);
 	}
 
 	public HasTapHandlers getLogoutButton() {

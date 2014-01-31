@@ -1,7 +1,5 @@
 package com.tomkimani.mgwt.demo.client.transactions;
 
-import java.util.Date;
-
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class MyTransaction extends JavaScriptObject implements Transaction{
@@ -20,6 +18,37 @@ public class MyTransaction extends JavaScriptObject implements Transaction{
 	
 	public final native String getDisplayName()/*-{ return this.transaction_type+" - "+"Ksh "+this.transaction_amount+" ("+this.transaction_time+")"
 												; }-*/;
+	@Override
+	public final void setCustNames(String names) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public final void setTransactionAmount(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public final void setTransactionCode(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public final void setTransactionDate(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public final void setTransactionTime(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public final void setTransactionType(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

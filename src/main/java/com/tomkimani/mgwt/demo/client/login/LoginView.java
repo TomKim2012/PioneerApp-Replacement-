@@ -38,6 +38,7 @@ public class LoginView implements ILoginView{
 	public LoginView() {
 		//widget = uiBinder.createAndBindUi(this);
 		widgetList = new WidgetList();
+		//ipList = new 
 		LayoutPanel = new LayoutPanel();
 		IssuesArea = new HTML();
 		loginButton = new Button("LOGIN");
@@ -55,7 +56,8 @@ public class LoginView implements ILoginView{
 		serverAddress = new MTextBox();
 		widgetList.add(userName);
 		widgetList.add(passWord);
-		//widgetList.add(serverAddress);
+		
+		widgetList.add(serverAddress);
 		
 		LayoutPanel.add(widgetList);
 		

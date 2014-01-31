@@ -12,10 +12,11 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DefaultDateTimeFormatInfo;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.EventBus;
-import com.googlecode.gwtphonegap.client.notification.AlertCallback;
+import com.googlecode.gwtphonegap.client.notification.ConfirmCallback;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.GroupingCellList;
@@ -25,6 +26,8 @@ import com.tomkimani.mgwt.demo.client.ClientFactory;
 import com.tomkimani.mgwt.demo.client.MyDialogs;
 import com.tomkimani.mgwt.demo.client.MyRequestBuilder;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity;
+import com.tomkimani.mgwt.demo.client.places.TransactionDetailPlace;
+import com.tomkimani.mgwt.demo.client.places.TransactionsPlace;
 import com.tomkimani.mgwt.demo.client.transactions.GroupCell.Content;
 import com.tomkimani.mgwt.demo.client.transactions.GroupCell.Header;
 
@@ -61,37 +64,65 @@ public class TransactionsActivity extends BaseActivity {
 		setView(view);
 
 		super.start(panel, eventBus);
-
-		view.getGroupCell().addSelectionHandler(
-				new SelectionHandler<GroupCell.Content>() {
-
+		
+		Place place = factory.getPlaceController().getWhere();
+		
+		if(place instanceof TransactionsPlace){
+			TransactionsPlace tPlace = (TransactionsPlace)place;
+			
+			final Transaction transaction = tPlace.getTransaction();
+			
+			if(!(transaction==null)){
+				view.renderDisplay(transaction);
+				
+				view.showLoading(false);
+				
+				view.getBackButton().addTapHandler(new TapHandler() {
+					
 					@Override
-					public void onSelection(SelectionEvent<Content> event) {
-						//System.out.println(event.getSelectedItem().getIndex());
-						int index = event.getSelectedItem().getIndex();
-						Transaction transaction = trxs.get(index);
-
-						//factory.getPlaceController().goTo(new TransactionDetailPlace(transaction));
-						
-						view.renderDisplay(transaction);
+					public void onTap(TapEvent event) {
+						view.showTransactions(true);
+						FetchDataFromServer(view);
 					}
 				});
-		
-		view.getBackButton().addTapHandler(new TapHandler() {
-			
-			@Override
-			public void onTap(TapEvent event) {
-				view.showTransactions(true);
+				
+			}else{
+				FetchDataFromServer(view);
+				
+				view.getGroupCell().addSelectionHandler(
+						new SelectionHandler<GroupCell.Content>() {
+
+							@Override
+							public void onSelection(SelectionEvent<Content> event) {
+								int index = event.getSelectedItem().getIndex();
+								Transaction transaction = trxs.get(index);
+
+								//factory.getPlaceController().goTo(new TransactionDetailPlace(transaction));
+								
+								view.renderDisplay(transaction);
+							}
+				});
+				
+				view.getBackButton().addTapHandler(new TapHandler() {
+					
+					@Override
+					public void onTap(TapEvent event) {
+						view.showTransactions(true);
+					}
+				});
+
+				
 			}
-		});
+			
+			
+			// view.setHeaderPullHandler(headerHandler);
 
-		// view.setHeaderPullHandler(headerHandler);
+			// Is data Loaded from server
 
-		// Is data Loaded from server
 
-		FetchDataFromServer(view);
+			panel.setWidget(view);
+		}
 
-		panel.setWidget(view);
 	}
 
 	private void FetchDataFromServer(final ITransactionsView view) {
@@ -194,15 +225,17 @@ public class TransactionsActivity extends BaseActivity {
 						public void onFailure(Throwable caught) {
 							view.showLoading(false);
 							
-							AlertCallback retryCallback = new AlertCallback() {
+							ConfirmCallback retryCallback = new ConfirmCallback() {
 								@Override
-								public void onOkButtonClicked() {
-									FetchDataFromServer(view);
+								public void onConfirm(int button) {
+									if(button == 1){
+										FetchDataFromServer(view);
+									}
 								}
 							};
 							
-							MyDialogs.alert("Network Problem",
-									"An Error occured while loading transactions",retryCallback,"RETRY");
+							MyDialogs.confirm("Network Problem",
+									"An Error occured while loading transactions. Retry?",retryCallback);
 							caught.printStackTrace();
 						}
 					});

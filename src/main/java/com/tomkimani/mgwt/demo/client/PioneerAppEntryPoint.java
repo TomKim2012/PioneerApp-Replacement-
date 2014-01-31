@@ -27,6 +27,8 @@ import com.googlecode.gwtphonegap.client.PhoneGapAvailableEvent;
 import com.googlecode.gwtphonegap.client.PhoneGapAvailableHandler;
 import com.googlecode.gwtphonegap.client.PhoneGapTimeoutEvent;
 import com.googlecode.gwtphonegap.client.PhoneGapTimeoutHandler;
+import com.googlecode.gwtphonegap.client.event.PauseEvent;
+import com.googlecode.gwtphonegap.client.event.PauseHandler;
 import com.googlecode.mgwt.mvp.client.AnimatableDisplay;
 import com.googlecode.mgwt.mvp.client.AnimatingActivityManager;
 import com.googlecode.mgwt.ui.client.MGWT;
@@ -35,6 +37,7 @@ import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort;
 import com.googlecode.mgwt.ui.client.MGWTSettings.ViewPort.DENSITY;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.tomkimani.mgwt.demo.client.css.MyColorTheme;
+import com.tomkimani.mgwt.demo.client.login.LoginActivity;
 import com.tomkimani.mgwt.demo.client.places.LoginPlace;
 
 /**
@@ -111,6 +114,16 @@ public class PioneerAppEntryPoint implements EntryPoint {
 		});
 
 		phoneGap.initializePhoneGap();
+		
+		
+		phoneGap.getEvent().getPauseHandler().addPauseHandler(new PauseHandler() {
+			
+			@Override
+			public void onPause(PauseEvent event) {
+				LoginActivity.loggedUserId = null;
+				
+			}
+		});
 
 		activityManager.setDisplay(display);
 		
@@ -125,7 +138,7 @@ public class PioneerAppEntryPoint implements EntryPoint {
 			@Override
 			public void onUncaughtException(Throwable e) {
 				//TODO put in your own meaninful handler
-				Window.alert("uncaught: " + e.getMessage());
+				//Window.alert("uncaught: " + e.getMessage());
 				e.printStackTrace();
 
 			}

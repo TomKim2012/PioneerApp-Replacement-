@@ -1,17 +1,17 @@
-package com.tomkimani.mgwt.demo.client.base;
+	package com.tomkimani.mgwt.demo.client.base;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.HasTapHandlers;
+import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.widget.HeaderButton;
 import com.googlecode.mgwt.ui.client.widget.HeaderPanel;
 import com.googlecode.mgwt.ui.client.widget.LayoutPanel;
 import com.googlecode.mgwt.ui.client.widget.ProgressIndicator;
 import com.googlecode.mgwt.ui.client.widget.buttonbar.ButtonBar;
-import com.googlecode.mgwt.ui.client.widget.tabbar.BookmarkTabBarButton;
-import com.googlecode.mgwt.ui.client.widget.tabbar.FeaturedTabBarButton;
-import com.googlecode.mgwt.ui.client.widget.tabbar.MoreTabBarButton;
 import com.tomkimani.mgwt.demo.client.base.BaseActivity.IView;
+import com.tomkimani.mgwt.demo.client.ui.FeaturedButton;
 
 public class BaseView implements IView{
 
@@ -21,11 +21,11 @@ public class BaseView implements IView{
 	private ProgressIndicator progressIndicator;
 	protected HeaderButton logoutButton;
 	private HTML title;
-	protected BookmarkTabBarButton transactionButton;
-	protected FeaturedTabBarButton homeButton;
-	protected MoreTabBarButton settingsButton;
+	protected FeaturedButton transactionButton;
+	protected FeaturedButton homeButton;
+	protected FeaturedButton settingsButton;
 	protected HeaderButton backButton;
-	private HTML loggedUser;
+	public HTML loggedUser;
 
 	public BaseView(){
 		//Container
@@ -78,14 +78,14 @@ public class BaseView implements IView{
 	private void createBottomButtons(){
 		//Initializations
 		buttonBar= new ButtonBar();
-		homeButton = new FeaturedTabBarButton();
-		transactionButton= new BookmarkTabBarButton();
-		settingsButton = new MoreTabBarButton();
+		homeButton = new FeaturedButton("icon-home");
+		transactionButton= new FeaturedButton("icon-list-ul");
+		settingsButton = new FeaturedButton("icon-group");
 		
 		//TabBar Buttons
 		homeButton.setText("Home");
 		transactionButton.setText("Transactions");
-		settingsButton.setText("Settings");
+		settingsButton.setText("Allocation");
 		
 		buttonBar.add(homeButton);
 		buttonBar.add(transactionButton);
